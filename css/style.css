@@ -1,0 +1,25 @@
+
+main {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    margin: 0 auto;
+  }
+
+.container {
+    display: grid;
+    grid-template-rows: 100px 100px 100px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.box {
+    height: 100px;
+    width: 100px;
+    border: solid;
+    text-align: center;
+}  
