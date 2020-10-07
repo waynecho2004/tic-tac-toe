@@ -9,6 +9,10 @@ class Player {
     }
 
     getPlayerName() {
-        this.name;
+        return this.name;
+    }
+
+    getPlayerMoves() {
+        return this.moves;
     }
 }

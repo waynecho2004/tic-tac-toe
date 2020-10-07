@@ -22,4 +22,5 @@ main {
     width: 100px;
     border: solid;
     text-align: center;
+    align-items: center;
 }  
