@@ -5,5 +5,15 @@
 
 console.log('It works!');
 
-const container = document.getElementsByClassName('container');
-console.log(document);
+const container = document.querySelector('.container');
+console.log(container);
+
+const moveHandler = (e) => {
+   // console.log('Clicked');
+   const boxSelected = e.target.id;
+   console.log('boxSelected: ' + boxSelected);
+}
+
+container.addEventListener('click', moveHandler);
+
+
