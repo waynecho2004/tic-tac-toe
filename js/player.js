@@ -6,11 +6,6 @@ class Player {
 
     move(move) {
         this.moves.push(move);
-        return this.isWinning(move);
-    }
-
-    isWinning(move) {
-        return true;
     }
 
     getPlayerName() {
