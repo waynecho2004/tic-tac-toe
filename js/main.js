@@ -18,6 +18,8 @@ winningMap.set('C2', [ ['A2', 'B2'], ['C1', 'C2']]);
 winningMap.set('C3', [ ['A1', 'B2'], ['C1', 'C2'], ['C3', 'B3'] ]);
 
 const container = document.querySelector('.container');
+const playButton = document.querySelector('button');
+const boxes = document.querySelectorAll('.box');
 const status = document.querySelector('#status');
 const player1 = new Player('Wayne');
 const player2 = new Player('Computer');
@@ -102,17 +104,23 @@ function getTurn(num, move) {
     }
 }
 
-function reset() {
-    sequence = 1;
+/**
+ * Reset game panel to play the game again
+ * @param {*} event 
+ */
+function reset(e) {
+    e.preventDefault();
+    sequence = 0;
     moves = [];
-    // TODO: reset movees
+    boxes.forEach(box => {
+        box.style.color = 'black';
+        box.innerHTML = '';
+    })
 }
 
 function isNewMove(move) {
     return !moves.includes(move);
 }
-
-container.addEventListener('click', moveHandler);
 
 /**
  * The determines if player is winning based on the move selected
@@ -160,7 +168,8 @@ function containWinningMatch(winningPattern, moves) {
 }
 
 
-
+container.addEventListener('click', moveHandler);
+playButton.addEventListener('click', reset);
 
 
 
