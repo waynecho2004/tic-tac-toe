@@ -22,4 +22,11 @@ main {
     width: 100px;
     border: solid;
     text-align: center;
+    font-size: xx-large;
 }  
+
+div p {
+    font-style: italic;
+    font-size: xx-large;
+    color: yellowgreen;
+}

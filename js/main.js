@@ -14,39 +14,59 @@ winningMap.set('B1', [ ['B2', 'B3'], ['A1', 'C1']]);
 winningMap.set('B2', [ ['A1', 'C3'], ['A2', 'C2'], ['A3','C1'], ['B1', 'B3']]);
 winningMap.set('B3', [ ['A3', 'C3'], ['B1', 'B2']]);
 winningMap.set('C1', [ ['A1', 'B1'], ['A3', 'B2'], ['C2', 'C3'] ]);
-winningMap.set('C2', [ ['A2', 'B2'], ['C1', 'C2']]);
-winningMap.set('C3', [ ['A1', 'B2'], ['C1', 'C2'], ['C3', 'B3'] ]);
+winningMap.set('C2', [ ['A2', 'B2'], ['C1', 'C3']]);
+winningMap.set('C3', [ ['A1', 'B2'], ['C1', 'C2'], ['A3', 'B3'] ]);
 
 const container = document.querySelector('.container');
 const playButton = document.querySelector('button');
 const boxes = document.querySelectorAll('.box');
 const status = document.querySelector('#status');
-const player1 = new Player('Wayne');
-const player2 = new Player('Computer');
-const draw = 9;
-console.log(status);
+const tie = 9;
 
-// INITIALIZATION
+// DECLARATION
+let player1 = null;
+let player2 = null;
 let sequence = 0;
 let moves = [];
-let player = player1;
-let nextPlayer = player2;
+let player = null;
+let nextPlayer = null;
 let gameOver = false;
+let wins = [];
+let loses = [];
+let ties = 0;
+
+/**
+ * Reset game panel to play the game again
+ * @param {*} event 
+ */
+function reset() {
+    console.log('reset');
+    player1 = new Player('Wayne');
+    player2 = new Player('Computer');
+    sequence = 0;
+    moves = [];
+    gameOver = false;
+    player = player1;
+    nextPlayer = player2;
+    displayStatus("");
+    boxes.forEach(box => {
+        box.style.color = 'black';
+        box.innerHTML = '';
+    })
+}
 
 function moveHandler(e) {
     e.preventDefault();
-   // console.log('Clicked');
-   const move = e.target.id;
-   console.log('moveSelected: ');
-   console.log(move);
+    const move = e.target.id;
+    // console.log('moveSelected: ' + move);
 
-   // player can proceed the move only if the move is not taken
-   if (gameOver) {
-       alert('Game is over.  Please click Play to start another game');
-   }
-   else if(isNewMove(move)) {
+    // player can proceed the move only if the move is not taken
+    if (gameOver) {
+        alert('Game is over.  Please click Play to start another game');
+    }
+    else if(isNewMove(move)) {
         sequence += 1;
-        console.log(player.name + '\'s move');
+        console.log(player.name + '\'s move: ' + 'step ' + sequence + ', move ' + move );
         // console.log(moves);
 
         // update the game's moves made so far
@@ -56,21 +76,26 @@ function moveHandler(e) {
         
         // check for winning move
         if(isPlayerWinning(player, move)) {
-            console.log('Winner');
+            console.log('********* Winner is ' + player.name + '**********');
             gameOver = true;
+            wins.push(player.name);
+            loses.push(nextPlayer.name);
             displayStatus(`${player.name} wins!!!`)
-        } else if (sequence === draw) {
-            console.log('The game is draw!');
+            console.log(wins);
+            console.log(loses);
+        } else if (sequence === tie) {
+            console.log('The game is tie!');
             gameOver = true;
-            displayStatus('The game is draw!')
+            ties += 1;
+            displayStatus('The game is tie!')
         } else {
-            console.log('game is not over yet');
+            // console.log('game is not over yet');
             displayStatus(`${nextPlayer.name}\'s Turn`)
         }
-   } 
-   else {
+    } 
+    else {
         alert('Wrong move, this move is already taken.  Please try again!');
-   }
+    }
 }
 
 function displayStatus(message) {
@@ -85,38 +110,24 @@ function displayStatus(message) {
   * @returns 
   */
 function getTurn(num, move) {
-    console.log('step ' + num + ', move ' + move );
+    //console.log('step ' + num + ', move ' + move );
     let selectedmove = document.querySelector(`#${move}`);
     console.log(selectedmove);
 
     if(num % 2 === 0) {
         selectedmove.style.color = 'green';
         selectedmove.innerHTML = 'O';
-        selectedmove.style.fontSize = 'xx-large';
         nextPlayer = player1;
         return player2;
     } else {
         selectedmove.style.color = 'blue';
         selectedmove.innerHTML = 'X';
-        selectedmove.style.fontSize = 'xx-large';
         nextPlayer = player2;
         return player1;
     }
 }
 
-/**
- * Reset game panel to play the game again
- * @param {*} event 
- */
-function reset(e) {
-    e.preventDefault();
-    sequence = 0;
-    moves = [];
-    boxes.forEach(box => {
-        box.style.color = 'black';
-        box.innerHTML = '';
-    })
-}
+
 
 function isNewMove(move) {
     return !moves.includes(move);
@@ -128,8 +139,8 @@ function isNewMove(move) {
  * @param {*} move 
  */
 function isPlayerWinning(player, move) {
-    // It takes at least 3 moves to win
-    if (moves.length < 3) {
+    // It takes at least 5 moves to win
+    if (player.getPlayerMoves().length < 3) {
         return false;  
     }
 
@@ -139,8 +150,9 @@ function isPlayerWinning(player, move) {
     winningPatterns = winningMap.get(move);
     
     winningPatterns.forEach(winningPattern => {
-        console.log('winning pattern for ' + move + ': ' + winningPattern);
+        // console.log('  winning pattern for ' + move + ': ' + winningPattern);
         if (containWinningMatch(winningPattern, player.getPlayerMoves())) {
+            console.log('  winning pattern found for ' + move + ': ' + winningPattern);
             isWinning = true;
         }
     });
@@ -155,11 +167,10 @@ function isPlayerWinning(player, move) {
  * @param {*} moves 
  */
 function containWinningMatch(winningPattern, moves) {
-
     let matchingmoveesCount = 0;
     winningPattern.forEach(move => {
         if(moves.includes(move)) {
-            console.log(moves + ' includes ' + move);
+            console.log('     ' + moves + ' includes ' + move);
             matchingmoveesCount += 1;
         }
     })
@@ -167,9 +178,12 @@ function containWinningMatch(winningPattern, moves) {
     return matchingmoveesCount == 2;
 }
 
+function init() {
+    reset();
+    container.addEventListener('click', moveHandler);
+    playButton.addEventListener('click', reset);
+}
 
-container.addEventListener('click', moveHandler);
-playButton.addEventListener('click', reset);
-
+document.addEventListener('DOMContentLoaded', init);
 
 
