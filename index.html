@@ -9,7 +9,7 @@
 <body>
     <header></header>
     <main>
-        <h1>Tic Tac Toe</h1>
+        <section><h1>Tic Tac Toe</h1></section>
         <section id="gamepanel" class="container">
             <div class="row">
                 <div id="A1" class="box">A1</div>
@@ -29,15 +29,20 @@
         </section>
         <section><p id='status'></p></section>
         <section id="scoreboard">
-            <div class="row">
-                <button id='player1' class="button button2">Player</button></section>
-                <button class="button button2">Tie</button></section>
-                <button id='player2' class="button button2">Computer</button></section>
-            </div>
             <div class='row'>
-                <p id="player1_score">0</p>
-                <p id='ties'>0</p>
-                <p id="player2_score">0</p>
+                <div>
+                    <button id='player1' class="button button2">Player</button>
+                    <p id="player1_score">0</p>
+                </div>
+                <div>
+                    <button class="button button2">Tie</button>
+                    <p id='ties'>0</p> 
+                </div>
+                <div>
+                    <button id='player2' class="button button2">Computer</button>
+                    <p id="player2_score">0</p>
+                </div>
+                
             </div>
         </section>
         <section><button class="button button1">Play Again</button></section>

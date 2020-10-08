@@ -43,15 +43,14 @@ main {
     color: yellowgreen;
 }
 
-#scoreboard div {
+#scoreboard .row {
     justify-content: space-between;
-    width: 335px; 
+    width: 370px; 
     font-size: xx-large;
-}
-
-div p {
     text-align: center;
 }
+
+
 
 .button1 {
     background-color: #008CBA;
