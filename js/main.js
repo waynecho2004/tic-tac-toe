@@ -3,7 +3,9 @@
 // to perform optimizations to run our code faster.
 'use strict';
 
-// This map contains the matching pattern to win
+console.log('It works!');
+
+// This map contains the matching pattern to win for each move
 const winningMap = new Map()
 winningMap.set('A1', [ ['A2', 'A3'], ['B2', 'C3'], ['B1', 'C1'] ]);
 winningMap.set('A2', [ ['A1', 'A3'], ['B2', 'C3']]);
@@ -15,61 +17,75 @@ winningMap.set('C1', [ ['A1', 'B1'], ['A3', 'B2'], ['C2', 'C3'] ]);
 winningMap.set('C2', [ ['A2', 'B2'], ['C1', 'C2']]);
 winningMap.set('C3', [ ['A1', 'B2'], ['C1', 'C2'], ['C3', 'B3'] ]);
 
-console.log('It works!');
-
 const container = document.querySelector('.container');
-// console.log(container);
-
-let sequence = 1;
-let moves = [];
-
+const status = document.querySelector('#status');
 const player1 = new Player('Wayne');
 const player2 = new Player('Computer');
-let player = new Player('who am i');
+console.log(status);
 
-const moveHandler = (e) => {
+// INITIALIATION
+
+let sequence = 0;
+let moves = [];
+let player = player1;
+let nextPlayer = player2;
+
+function moveHandler(e) {
    // console.log('Clicked');
    const box = e.target.id;
    console.log('boxSelected: ');
    console.log(box);
 
+   // player can proceed the move only if the box is not taken
    if(isNewMove(box)) {
-        moves.push(box)
-        // console.log(moves);
-        player = getTurn(sequence, box);
+        sequence += 1;
         console.log(player.name + '\'s move');
+        // console.log(moves);
+
+        // update the moves made so far
+        moves.push(box);
+        player = getTurn(sequence, box);
         player.move(box);
         
-        // TODO: check for winning move
+        // check for winning move
         if(isPlayerWinning(player, box)) {
-            // TODO: display winner
             console.log('Winner');
+            displayStatus(`${player.name} wins!!!`)
         } else {
             console.log('game is not over yet');
+            displayStatus(`${nextPlayer.name}\'s Turn`)
         }
 
-        sequence += 1;
    } else {
         alert('Wrong move, this box is already taken.  Please try again!');
    }
 }
 
+function displayStatus(message) {
+    status.innerHTML = message;
+}
+
+ /**
+  * This determines current player and next player based on the play sequence.   
+  * And it marks the clicked box with appropriate symbol or text
+  * @param {*} num  sequence of the game
+  * @param {*} box  the box current player is clicked on 
+  * @returns 
+  */
 function getTurn(num, box) {
     console.log('move ' + num + ', boxId ' + box );
     let selectedBox = document.querySelector(`#${box}`);
     console.log(selectedBox);
 
-    if(num === 1) {
-        selectedBox.style.color = 'blue';
-        selectedBox.innerHTML = 'X';
-        return player1;
-    } else if(num % 2 === 0) {
+    if(num % 2 === 0) {
         selectedBox.style.color = 'green';
         selectedBox.innerHTML = 'O';
+        nextPlayer = player1;
         return player2;
     } else {
         selectedBox.style.color = 'blue';
         selectedBox.innerHTML = 'X';
+        nextPlayer = player2;
         return player1;
     }
 }
@@ -86,43 +102,49 @@ function isNewMove(box) {
 
 container.addEventListener('click', moveHandler);
 
-
-
+/**
+ * The determines if player is winning based on the box selected
+ * @param {Player} player 
+ * @param {*} box 
+ */
 function isPlayerWinning(player, box) {
-    let winningStrArr = winningMap.get(box);
-    console.log('winning str arr: ' + winningStrArr);
-    let moves = player.getPlayerMoves();
-    for (let i =0; i< winningStrArr.length; i++) {
-        let winningStr = winningStrArr[i];
-        // console.log('winningStr: '  + winningStr);
-        if (containWinningMatch(winningStr, moves)) {
-            return true;
-        }
-    }
-    // console.log(winningStr);
-    return false;
-}
-
-// Check if winning pattern is matched
-function containWinningMatch(arr, moves) {
     // It takes at least 3 moves to win
     if (moves.length < 3) {
         return false;  
     }
 
-    let winningCount = 0;
-    for(let i=0; i < arr.length; i++) {
+    // get the winning patterns for selected box
+    let winningPatterns = [];
+    let isWinning = false;
+    winningPatterns = winningMap.get(box);
     
-        if(moves.includes(arr[i])) {
-            console.log(moves + ' includes ' + arr[i]);
-            winningCount += 1;
+    winningPatterns.forEach(winningPattern => {
+        console.log('winning pattern for ' + box + ': ' + winningPattern);
+        if (containWinningMatch(winningPattern, player.getPlayerMoves())) {
+            isWinning = true;
         }
-    }
-    if (winningCount == 2) {
-        return true;
-    } else {
-        return false;
-    }
+    });
+    
+    return isWinning;
+}
+
+/**
+ * This determine the moves play made match any winning pattern. 
+ * If any two matching boxes are found, player wins
+ * @param {*} winningPattern 
+ * @param {*} moves 
+ */
+function containWinningMatch(winningPattern, moves) {
+
+    let matchingBoxesCount = 0;
+    winningPattern.forEach(box => {
+        if(moves.includes(box)) {
+            console.log(moves + ' includes ' + box);
+            matchingBoxesCount += 1;
+        }
+    })
+
+    return matchingBoxesCount == 2;
 }
 
 
