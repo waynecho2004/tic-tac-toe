@@ -70,6 +70,7 @@ function moveHandler(e) {
         alert('Game is over.  Please click Play to start another game');
     }
     else if(isNewMove(move)) {
+        playSound();
         sequence += 1;
         console.log(player.name + '\'s move: ' + 'step ' + sequence + ', move ' + move );
         // console.log(moves);
@@ -101,6 +102,12 @@ function moveHandler(e) {
     else {
         alert('Wrong move, this move is already taken.  Please try again!');
     }
+}
+
+function playSound() {
+    // let snd = new Audio("../audio/Button.wav");
+    let audio = new Audio("../audio/Button_Push.mp3");
+    audio.play();
 }
 
 function updateScoreBoard() {
