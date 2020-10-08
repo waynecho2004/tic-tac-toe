@@ -23,7 +23,7 @@ const player1 = new Player('Wayne');
 const player2 = new Player('Computer');
 console.log(status);
 
-// INITIALIATION
+// INITIALIZATION
 
 let sequence = 0;
 let moves = [];
@@ -31,6 +31,7 @@ let player = player1;
 let nextPlayer = player2;
 
 function moveHandler(e) {
+    e.preventDefault();
    // console.log('Clicked');
    const box = e.target.id;
    console.log('boxSelected: ');
@@ -129,7 +130,7 @@ function isPlayerWinning(player, box) {
 }
 
 /**
- * This determine the moves play made match any winning pattern. 
+ * This determine if the moves player made match any winning pattern. 
  * If any two matching boxes are found, player wins
  * @param {*} winningPattern 
  * @param {*} moves 
