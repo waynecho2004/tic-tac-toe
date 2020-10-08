@@ -21,10 +21,10 @@ const container = document.querySelector('.container');
 const status = document.querySelector('#status');
 const player1 = new Player('Wayne');
 const player2 = new Player('Computer');
+const draw = 9;
 console.log(status);
 
 // INITIALIZATION
-
 let sequence = 0;
 let moves = [];
 let player = player1;
@@ -49,7 +49,10 @@ function moveHandler(e) {
         player.move(box);
         
         // check for winning move
-        if(isPlayerWinning(player, box)) {
+        if (sequence === draw) {
+            console.log('The game is draw!');
+            displayStatus('The game is draw!')
+        } else if(isPlayerWinning(player, box)) {
             console.log('Winner');
             displayStatus(`${player.name} wins!!!`)
         } else {
@@ -74,18 +77,20 @@ function displayStatus(message) {
   * @returns 
   */
 function getTurn(num, box) {
-    console.log('move ' + num + ', boxId ' + box );
+    console.log('step ' + num + ', move ' + box );
     let selectedBox = document.querySelector(`#${box}`);
     console.log(selectedBox);
 
     if(num % 2 === 0) {
         selectedBox.style.color = 'green';
         selectedBox.innerHTML = 'O';
+        selectedBox.style.fontSize = 'xx-large';
         nextPlayer = player1;
         return player2;
     } else {
         selectedBox.style.color = 'blue';
         selectedBox.innerHTML = 'X';
+        selectedBox.style.fontSize = 'xx-large';
         nextPlayer = player2;
         return player1;
     }
