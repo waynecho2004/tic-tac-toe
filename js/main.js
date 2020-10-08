@@ -40,7 +40,7 @@ function moveHandler(e) {
 
    // player can proceed the move only if the move is not taken
    if (gameOver) {
-       alert('Game is over.  Please try another game');
+       alert('Game is over.  Please click Play to start another game');
    }
    else if(isNewMove(move)) {
         sequence += 1;
@@ -53,14 +53,14 @@ function moveHandler(e) {
         player.move(move);
         
         // check for winning move
-        if (sequence === draw) {
-            console.log('The game is draw!');
-            gameOver = true;
-            displayStatus('The game is draw!')
-        } else if(isPlayerWinning(player, move)) {
+        if(isPlayerWinning(player, move)) {
             console.log('Winner');
             gameOver = true;
             displayStatus(`${player.name} wins!!!`)
+        } else if (sequence === draw) {
+            console.log('The game is draw!');
+            gameOver = true;
+            displayStatus('The game is draw!')
         } else {
             console.log('game is not over yet');
             displayStatus(`${nextPlayer.name}\'s Turn`)
