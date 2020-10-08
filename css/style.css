@@ -1,3 +1,15 @@
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
 
 main {
     display: flex;
@@ -25,8 +37,26 @@ main {
     font-size: xx-large;
 }  
 
-div p {
+#status {
     font-style: italic;
     font-size: xx-large;
     color: yellowgreen;
+}
+
+#scoreboard div {
+    justify-content: space-between;
+    width: 335px; 
+    font-size: xx-large;
+}
+
+div p {
+    text-align: center;
+}
+
+.button1 {
+    background-color: #008CBA;
+}
+
+.button2 {
+    background-color: #555555;
 }

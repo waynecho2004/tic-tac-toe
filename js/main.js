@@ -18,9 +18,12 @@ winningMap.set('C2', [ ['A2', 'B2'], ['C1', 'C3']]);
 winningMap.set('C3', [ ['A1', 'B2'], ['C1', 'C2'], ['A3', 'B3'] ]);
 
 const container = document.querySelector('.container');
-const playButton = document.querySelector('button');
+const playButton = document.querySelector('.button1');
 const boxes = document.querySelectorAll('.box');
 const status = document.querySelector('#status');
+const player1Score = document.querySelector('#player1_score');
+const player2Score = document.querySelector('#player2_score');
+const tieScore = document.querySelector('#ties');
 const tie = 9;
 
 // DECLARATION
@@ -34,6 +37,7 @@ let gameOver = false;
 let wins = [];
 let loses = [];
 let ties = 0;
+let statusTxt = '';
 
 /**
  * Reset game panel to play the game again
@@ -41,14 +45,15 @@ let ties = 0;
  */
 function reset() {
     console.log('reset');
-    player1 = new Player('Wayne');
-    player2 = new Player('Computer');
+    player1 = new Player('A', 'Wayne');
+    player2 = new Player('B', 'Computer');
     sequence = 0;
     moves = [];
     gameOver = false;
     player = player1;
     nextPlayer = player2;
-    displayStatus("");
+    statusTxt = '';
+    displayStatus('');
     boxes.forEach(box => {
         box.style.color = 'black';
         box.innerHTML = '';
@@ -76,17 +81,17 @@ function moveHandler(e) {
         
         // check for winning move
         if(isPlayerWinning(player, move)) {
-            console.log('********* Winner is ' + player.name + '**********');
-            gameOver = true;
-            wins.push(player.name);
-            loses.push(nextPlayer.name);
+            // console.log('********* Winner is ' + player.name + '**********');
+            
+            wins.push(player.id);
+            loses.push(nextPlayer.id);
+            
+            updateScoreBoard();
             displayStatus(`${player.name} wins!!!`)
-            console.log(wins);
-            console.log(loses);
         } else if (sequence === tie) {
-            console.log('The game is tie!');
-            gameOver = true;
+            // console.log('The game is tie!');
             ties += 1;
+            updateScoreBoard();
             displayStatus('The game is tie!')
         } else {
             // console.log('game is not over yet');
@@ -96,6 +101,17 @@ function moveHandler(e) {
     else {
         alert('Wrong move, this move is already taken.  Please try again!');
     }
+}
+
+function updateScoreBoard() {
+    gameOver = true;
+    let scores = wins.reduce(function(acc,win) {
+        acc[win] = acc[win] ? acc[win] + 1 : 1;
+        return acc;
+    },[]);
+    player1Score.innerHTML = scores.A === undefined? 0 : scores.A;
+    player2Score.innerHTML = scores.B === undefined? 0 : scores.B;
+    tieScore.innerHTML = ties;
 }
 
 function displayStatus(message) {
@@ -126,8 +142,6 @@ function getTurn(num, move) {
         return player1;
     }
 }
-
-
 
 function isNewMove(move) {
     return !moves.includes(move);
@@ -182,6 +196,10 @@ function init() {
     reset();
     container.addEventListener('click', moveHandler);
     playButton.addEventListener('click', reset);
+    const player1Tag = document.querySelector('#player1');
+    const player2Tag = document.querySelector('#player2');
+    player1Tag.innerHTML = player1.name;
+    player2Tag.innerHTML = player2.name;
 }
 
 document.addEventListener('DOMContentLoaded', init);
