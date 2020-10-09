@@ -67,7 +67,7 @@ function moveHandler(e) {
 
     // player can proceed the move only if the move is not taken
     if (gameOver) {
-        alert('Game is over.  Please click Play to start another game');
+        alert('Game over.  Please click Play to start another game');
     }
     else if(isNewMove(move)) {
  
@@ -79,7 +79,7 @@ function moveHandler(e) {
             setTimeout(function(){ 
                 makeMove(automateMove());
                 container.style.pointerEvents = 'auto';
-            }, 2000);
+            }, 1000);
         }
         
     } 
@@ -122,7 +122,7 @@ function makeMove(move) {
 
 function playSound() {
     console.log("Playing sound")
-    let audio = new Audio("../audio/Button.wav");
+    let audio = new Audio("./audio/Button.wav");
     audio.play();
 }
 
