@@ -45,7 +45,7 @@ let statusTxt = '';
  */
 function reset() {
     console.log('reset');
-    player1 = new Player('A', 'Wayne');
+    player1 = new Player('A', 'Player');
     player2 = new Player('B', 'Computer');
     sequence = 0;
     moves = [];
@@ -108,12 +108,12 @@ function makeMove(move) {
         loses.push(nextPlayer.id);
         
         updateScoreBoard();
-        displayStatus(`${player.name} wins!!!`)
+        displayStatus(`${player.name} wins!!!`, 'red')
     } else if (sequence === tie) {
         // console.log('The game is tie!');
         ties += 1;
         updateScoreBoard();
-        displayStatus('The game is tie!')
+        displayStatus('The game is tie!', 'green')
     } else {
         // console.log('game is not over yet');
         displayStatus(`${nextPlayer.name}\'s Turn`)
@@ -137,8 +137,9 @@ function updateScoreBoard() {
     tieScore.innerHTML = ties;
 }
 
-function displayStatus(message) {
+function displayStatus(message, color='black') {
     status.innerHTML = message;
+    status.style.color = color
 }
 
  /**
@@ -154,13 +155,15 @@ function getTurn(num, move) {
     console.log(selectedmove);
 
     if(num % 2 === 0) {
-        selectedmove.style.color = 'green';
-        selectedmove.innerHTML = 'O';
+        // selectedmove.style.color = 'green';
+        let image = `<img src="./images/cat.jpeg" width='100px' height='100px'>`
+        selectedmove.innerHTML = image
         nextPlayer = player1;
         return player2;
     } else {
-        selectedmove.style.color = 'blue';
-        selectedmove.innerHTML = 'X';
+        // selectedmove.style.color = 'blue';
+        let image = `<img src="./images/dog.jpeg" width='100px' height='100px'>`
+        selectedmove.innerHTML = image;
         nextPlayer = player2;
         return player1;
     }

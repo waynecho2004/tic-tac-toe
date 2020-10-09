@@ -8,8 +8,11 @@
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
-    cursor: pointer;
   }
+
+body {
+    background-color: rgb(189, 235, 231);
+}  
 
 main {
     display: flex;
@@ -22,6 +25,7 @@ main {
 .container {
     display: grid;
     grid-template-rows: 100px 100px 100px;
+    background-color: wheat;
 }
 
 .row {
@@ -32,15 +36,14 @@ main {
 .box {
     height: 100px;
     width: 100px;
-    border: solid;
     text-align: center;
     font-size: xx-large;
+    border: 1px solid black;
 }  
 
 #status {
     font-style: italic;
     font-size: xx-large;
-    color: yellowgreen;
 }
 
 #scoreboard .row {
