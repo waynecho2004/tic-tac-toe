@@ -20,7 +20,7 @@ winningMap.set('C3', [ ['A1', 'B2'], ['C1', 'C2'], ['A3', 'B3'] ]);
 const container = document.querySelector('.container');
 const playButton = document.querySelector('.button1');
 const boxes = document.querySelectorAll('.box');
-const status = document.querySelector('#status');
+const status = document.querySelector('h1');
 const player1Score = document.querySelector('#player1_score');
 const player2Score = document.querySelector('#player2_score');
 const tieScore = document.querySelector('#ties');
@@ -37,7 +37,6 @@ let gameOver = false;
 let wins = [];
 let loses = [];
 let ties = 0;
-let statusTxt = '';
 
 /**
  * Reset game panel to play the game again
@@ -52,8 +51,7 @@ function reset() {
     gameOver = false;
     player = player1;
     nextPlayer = player2;
-    statusTxt = '';
-    displayStatus('');
+    displayStatus('New Game');
     boxes.forEach(box => {
         box.style.color = 'black';
         box.innerHTML = '';

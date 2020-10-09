@@ -25,7 +25,7 @@ main {
 .container {
     display: grid;
     grid-template-rows: 100px 100px 100px;
-    background-color: wheat;
+    background-color: white;
 }
 
 .row {
@@ -42,15 +42,15 @@ main {
 }  
 
 #status {
-    font-style: italic;
     font-size: xx-large;
 }
 
 #scoreboard .row {
     justify-content: space-between;
-    width: 370px; 
+    width: 330px; 
     font-size: xx-large;
     text-align: center;
+    margin: 20px;
 }
 
 .button1 {
