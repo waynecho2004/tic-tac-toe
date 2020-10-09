@@ -78,7 +78,7 @@ function moveHandler(e) {
                 // makeMove(automateMove());  // THIS IS THE WORKING LOGIC
 
                 // makeMove(automateMoveLevel2(player2));  // Assuming computer is always player 2
-                makeMove(findPlayer1WinningMoveIfPossible());
+                makeMove(getMovePreventingPlayerFromWinning());
                 container.style.pointerEvents = 'auto';
             }, 1000);
         }
@@ -185,7 +185,7 @@ function automateMove() {
 /**
  * Assuming player always start first. Here's the winning prevention strategy to make game more difficult
  */
-function getMovePreventPlayerFromWinning() {
+function getMovePreventingPlayerFromWinning() {
     console.log('findPlayer1WinningMoveIfPossible');
     // find all the available moves, 
     let allMoves = ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3'];
