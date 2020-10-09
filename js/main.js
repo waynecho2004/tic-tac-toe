@@ -8,8 +8,8 @@ console.log('It works!');
 // This map contains the matching pattern to win for each move
 const winningMap = new Map()
 winningMap.set('A1', [ ['A2', 'A3'], ['B2', 'C3'], ['B1', 'C1'] ]);
-winningMap.set('A2', [ ['A1', 'A3'], ['B2', 'C3']]);
-winningMap.set('A3', [ ['A1', 'A2'], ['B3', 'C3'], ['A1', 'B2']]);
+winningMap.set('A2', [ ['A1', 'A3'], ['B2', 'C2']]);
+winningMap.set('A3', [ ['A1', 'A2'], ['B3', 'C3'], ['C1', 'B2']]);
 winningMap.set('B1', [ ['B2', 'B3'], ['A1', 'C1']]);
 winningMap.set('B2', [ ['A1', 'C3'], ['A2', 'C2'], ['A3','C1'], ['B1', 'B3']]);
 winningMap.set('B3', [ ['A3', 'C3'], ['B1', 'B2']]);
@@ -70,43 +70,59 @@ function moveHandler(e) {
         alert('Game is over.  Please click Play to start another game');
     }
     else if(isNewMove(move)) {
-        playSound();
-        sequence += 1;
-        console.log(player.name + '\'s move: ' + 'step ' + sequence + ', move ' + move );
-        // console.log(moves);
+ 
+        makeMove(move);
 
-        // update the game's moves made so far
-        moves.push(move);
-        player = getTurn(sequence, move);
-        player.move(move);
-        
-        // check for winning move
-        if(isPlayerWinning(player, move)) {
-            // console.log('********* Winner is ' + player.name + '**********');
-            
-            wins.push(player.id);
-            loses.push(nextPlayer.id);
-            
-            updateScoreBoard();
-            displayStatus(`${player.name} wins!!!`)
-        } else if (sequence === tie) {
-            // console.log('The game is tie!');
-            ties += 1;
-            updateScoreBoard();
-            displayStatus('The game is tie!')
-        } else {
-            // console.log('game is not over yet');
-            displayStatus(`${nextPlayer.name}\'s Turn`)
+        if (nextPlayer.name === 'Computer' && !gameOver) {
+            // console.log('possible move: ' + automateMove());  // TODO: automate move
+            container.style.pointerEvents = 'none';
+            setTimeout(function(){ 
+                makeMove(automateMove());
+                container.style.pointerEvents = 'auto';
+            }, 2000);
         }
+        
     } 
     else {
         alert('Wrong move, this move is already taken.  Please try again!');
     }
 }
 
+function makeMove(move) {
+    playSound();
+    sequence += 1;
+    
+    // console.log(moves);
+
+    // update the game's moves made so far
+    moves.push(move);
+    player = getTurn(sequence, move);
+    player.move(move);
+    console.log(player.name + '\'s move: ' + 'step ' + sequence + ', move ' + move );
+
+    // check for winning move
+    if(isPlayerWinning(player, move)) {
+        // console.log('********* Winner is ' + player.name + '**********');
+        
+        wins.push(player.id);
+        loses.push(nextPlayer.id);
+        
+        updateScoreBoard();
+        displayStatus(`${player.name} wins!!!`)
+    } else if (sequence === tie) {
+        // console.log('The game is tie!');
+        ties += 1;
+        updateScoreBoard();
+        displayStatus('The game is tie!')
+    } else {
+        // console.log('game is not over yet');
+        displayStatus(`${nextPlayer.name}\'s Turn`)
+    }
+}
+
 function playSound() {
-    // let snd = new Audio("../audio/Button.wav");
-    let audio = new Audio("../audio/Button_Push.mp3");
+    console.log("Playing sound")
+    let audio = new Audio("../audio/Button.wav");
     audio.play();
 }
 
@@ -148,6 +164,19 @@ function getTurn(num, move) {
         nextPlayer = player2;
         return player1;
     }
+}
+
+function automateMove() {
+    let allMoves = ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3'];
+    let possibleMoves = allMoves.filter(mv => !moves.includes(mv));
+    console.log('possible moves: ' + possibleMoves);
+    let index = getRandomIndex(possibleMoves.length);
+    console.log('index: ' + index);
+    return possibleMoves[index];
+}
+
+function getRandomIndex(maximumSize) {
+    return Math.floor(Math.random() * maximumSize);
 }
 
 function isNewMove(move) {
