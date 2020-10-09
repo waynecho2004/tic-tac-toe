@@ -3,7 +3,7 @@
 // to perform optimizations to run our code faster.
 'use strict';
 
-console.log('It works!');
+// console.log('It works!');
 
 // This map contains the matching pattern to win for each move
 const winningMap = new Map()
@@ -75,7 +75,10 @@ function moveHandler(e) {
             // console.log('possible move: ' + automateMove());  // TODO: automate move
             container.style.pointerEvents = 'none';
             setTimeout(function(){ 
-                makeMove(automateMove());
+                // makeMove(automateMove());  // THIS IS THE WORKING LOGIC
+
+                // makeMove(automateMoveLevel2(player2));  // Assuming computer is always player 2
+                makeMove(findPlayer1WinningMoveIfPossible());
                 container.style.pointerEvents = 'auto';
             }, 1000);
         }
@@ -119,7 +122,7 @@ function makeMove(move) {
 }
 
 function playSound() {
-    console.log("Playing sound")
+    // console.log("Playing sound")
     let audio = new Audio("./audio/Button.wav");
     audio.play();
 }
@@ -167,13 +170,103 @@ function getTurn(num, move) {
     }
 }
 
+/**
+ * Returns the key of a random box that's not yet taken
+ */
 function automateMove() {
     let allMoves = ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3'];
     let possibleMoves = allMoves.filter(mv => !moves.includes(mv));
-    console.log('possible moves: ' + possibleMoves);
+    // console.log('possible moves: ' + possibleMoves);
     let index = getRandomIndex(possibleMoves.length);
-    console.log('index: ' + index);
+    // console.log('index: ' + index);
     return possibleMoves[index];
+}
+
+/**
+ * Assuming player always start first. Here's the winning prevention strategy to make game more difficult
+ */
+function getMovePreventPlayerFromWinning() {
+    console.log('findPlayer1WinningMoveIfPossible');
+    // find all the available moves, 
+    let allMoves = ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3'];
+    let possibleMoves = allMoves.filter(mv => !moves.includes(mv));
+
+    // and find the first that leads to winning move
+    for (let i=0; i< possibleMoves.length; i++) {
+        if(isPlayerWinning(player1, possibleMoves[i])) {
+            console.log('player\'s possible winning move ' + possibleMoves[i])
+            return possibleMoves[i];
+        }
+    }
+    // console.log('No winning move found');
+    if (possibleMoves.includes('B2')) { 
+        return 'B2';
+    } else {
+        let index = getRandomIndex(possibleMoves.length);
+        return possibleMoves[index];
+    }
+    
+    // console.log('index: ' + index);
+    
+}
+
+// /**
+//  * This is an enhancement, definitely not the best logic to beat the game. I called this level2
+//  * This finds the adjacent empty box that can leads to victory
+//  */
+// function automateMoveLevel2(ai) {
+//     // If this is first move, find one that empty adjacent box, record nextMoves
+//     let nextMoves = [];
+//     let move = null;
+//     if (ai.moves.length === 0) {
+//         move = automateMove();
+//         nextMoves = getNextMoves(move);
+//     } else {
+//         // from the nextMoves, find the one that's not taken
+//         nextMoves = ai.getPlayerNextMoves();
+//         // nextMoves = getNextMoves(move);
+
+//         if(nextMoves.length === 0) {
+//             move = automateMove();
+//             nextMoves = getNextMoves(move);
+//         } else {
+//             // get the moves not taken
+//             nextMoves = nextMoves.filter(move => !moves.includes(move));
+//             if (nextMoves.length === 0) {
+//                 move = automateMove();
+//                 nextMoves = getNextMoves(move);
+//             } else {
+//                 let size = nextMoves.length;
+//                 for(let i=0; i< size; i++) {
+//                     // check if any move leads to winning
+//                     if(isPlayerWinning(ai, nextMoves[i])) {
+//                         return nextMoves[i];
+//                     }
+//                 }
+                
+//                 let index = getRandomIndex(size)
+//                 move = nextMoves[index];
+//                 console.log('size: ' + size + ', index: ' + index + ', move ' + move);
+//                 // TODO: can following be enhanced to find one not empty
+//                 nextMoves = getNextMoves(move); 
+//             }
+//         }
+    
+
+
+//     }
+//     ai.setPlayerNextMoves(nextMoves);
+//     console.log('AI next moves ' + nextMoves);
+//     return move;
+// }
+
+/**
+ * Get all the empty adjacent boxes as next moves
+ * @param {*} move 
+ */
+function getNextMoves(move) {
+    console.log('Try to get next moves with this move: ' + move);
+    return winningMap.get(move).map(e => e[0]).filter(n => !moves.includes(n));
 }
 
 function getRandomIndex(maximumSize) {
@@ -191,9 +284,9 @@ function isNewMove(move) {
  */
 function isPlayerWinning(player, move) {
     // It takes at least 5 moves to win
-    if (player.getPlayerMoves().length < 3) {
-        return false;  
-    }
+    // if (moves.length < 5) {
+    //     return false;  
+    // }
 
     // get the winning patterns for selected move
     let winningPatterns = [];
