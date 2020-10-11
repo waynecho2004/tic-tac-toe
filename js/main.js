@@ -51,7 +51,7 @@ function reset() {
     gameOver = false;
     player = player1;
     nextPlayer = player2;
-    displayStatus('New Game');
+    displayStatus('Tic Tac Toe');
     boxes.forEach(box => {
         box.style.color = 'black';
         box.innerHTML = '';
@@ -209,8 +209,8 @@ function isNewMove(move) {
  * @param {*} move 
  */
 function isPlayerWinning(player, move) {
-    // It takes at least 5 moves to win
-    if (moves.length < 4) {
+    // It takes at least 3 moves to win
+    if (moves.length < 3) {  
         return false;  
     }
 
