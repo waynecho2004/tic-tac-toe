@@ -23,16 +23,18 @@ This is a simple game of Tic Tac Toe, with you as the player (dog), plays agains
 
 ## Strategy:
 - Keep it simple
-- Focus on MVP
-- Refactor to prevent repeating myself
+- Focus on the MVP
+- Refactor to prevent repeating code
 - Work on extra features once MVP is complete and fully tested
 
 ## Development Process
 
+[Wideframe](https://docs.google.com/drawings/d/19DADHaxUBapYaNkg9MQp0AqSlUA8hwx6Eod-54wXTT4/edit)
+
 1. Create a simple 3x3 board in the middle of the page using CSS Grid and Flexbox design, which also makes the page fully responsive.
 2. Give each box an unique id/key - A1, A2, A3, B1, B2, B3, etc
 3. Create a map with all the winning pattern for each id/key
-4. Create a class of Player with attributes - name, id, moves.  The main function is the keep track of the moves the player makes
+4. Create a class of Player with attributes - name, id, moves.  The main function is to keep track of the moves the player makes
 5. Create a eventListener and callback for click event on the boxes
 6. Create winning logic
 7. Create AI logic
