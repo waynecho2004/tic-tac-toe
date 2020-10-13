@@ -63,7 +63,10 @@ function moveHandler(e) {
     const move = e.target.id;
     // console.log('moveSelected: ' + move);
 
-    if (gameOver) {
+    if(!move) {
+        // skip invalid move
+        alert('Wrong move, this move is already taken.  Please try again!');
+    } else if (gameOver) {
         alert('Game over.  Please click Play Again to start a new game');
     }
     else if(isNewMove(move)) {
